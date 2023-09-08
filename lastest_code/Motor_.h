@@ -49,7 +49,6 @@ typedef struct Sendcom {
 
 class Motor {
 public:
-  uint8_t ENA;
   uint8_t Dir;
   uint8_t PUL;
   uint8_t int_pin;
@@ -63,34 +62,31 @@ public:
   float c_Point = 0;
 
   /////////////수동조작 변수//////////////
-  float acc = 0;
-  float c_Point = 0;
   float acc_Speed = 1;
   float max_Speed = 1000;
   ////////////////////////////////////////
 
-  Motor(uint8_t E, uint8_t D, uint8_t P, float REV_PUL)  //ENABLE, Direction, PULSE, 분주비
+  Motor(uint8_t D, uint8_t P, float PR, float Gear_Ratio)
   {
-    ENA = E, Dir = D, PUL = P;
-    tmp = REV_PUL / (float)360;
+    Dir = D, PUL = P, tmp = PR * Gear_Ratio / (float) 360;
   }
 
-  Motor(uint8_t E, uint8_t D, uint8_t P, float REV_PUL, float Gear_Ratio)  //ENABLE, Direction, PULSE, 분주비, 기어비
+  void Setting()
   {
-    ENA = E, Dir = D, PUL = P;
-    tmp = REV_PUL * Gear_Ratio / (float)360;
-  }
-
-  Motor(uint8_t E, uint8_t in_pin, uint8_t D, uint8_t P, float REV_PUL, float Gear_Ratio)  //ENABLE, interrupt pin, Direction, PULSE, 분주비, 기어비
-  {
-    ENA = E, Dir = D, PUL = P, int_pin = in_pin;
-    tmp = REV_PUL * Gear_Ratio / (float)360;
-  }
-
-  void Setting() {
-    pinMode(ENA, OUTPUT);
     pinMode(Dir, OUTPUT);
     pinMode(PUL, OUTPUT);
+  }
+
+  void Setting_A4988(uint8_t M1,uint8_t M2,uint8_t M3)
+  {
+    pinMode(Dir, OUTPUT);
+    pinMode(PUL, OUTPUT);
+    pinMode(M1, OUTPUT);
+    pinMode(M2, OUTPUT);
+    pinMode(M3, OUTPUT);
+    digitalWrite(M1, HIGH);
+    digitalWrite(M2, HIGH);
+    digitalWrite(M3, HIGH);
   }
 
   void Set_MA_Speed(float ac, float ma)  //수동 동작 가속도, 속도 조정
