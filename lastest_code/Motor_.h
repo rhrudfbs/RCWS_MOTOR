@@ -56,7 +56,8 @@ public:
   float Ab_Angle = 0;
   float Ab_Pulse = 0;
   float tmp;
-  float Limit_Angle = 180;
+  float P_Limit_Angle = 180;
+  float M_Limit_Angle = -180;
 
   float acc = 0;
   float c_Point = 0;
@@ -169,13 +170,13 @@ public:
 
   void PID(float Angle)  //PID 제어
   {
-    if(Angle >= Limit_Angle)
+    if(Angle >= P_Limit_Angle)
     {
-      Angle = Limit_Angle;
+      Angle = P_Limit_Angle;
     }
-    else if(Angle <= -Limit_Angle)
+    else if(Angle <= M_Limit_Angle)
     {
-      Angle = -Limit_Angle;
+      Angle = M_Limit_Angle;
     }
     
     Time = micros();
