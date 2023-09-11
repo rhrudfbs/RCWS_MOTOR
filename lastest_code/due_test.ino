@@ -24,9 +24,9 @@ uint8_t OpticalPan_interrupt = 36;
 uint8_t BodyTilt_interrupt = 38;
 uint8_t BodyPan_interrupt = 40;
 
-String data;
-char cmd;
-float Angle1 = 0;
+// String data;
+// char cmd;
+// float Angle1 = 0;
 
 void setup() {
   // put your setup code here, to run once:
@@ -54,53 +54,54 @@ void setup() {
 
 void loop() {
   //put your main code here, to run repeatedly:
-  // Serial.readBytes(Recvbuf, sizeof(Recvbuf));
-  // if (Recvbuf[23] == 65) {
-  //   memcpy(&recvcom, Recvbuf, sizeof(Recvbuf));
-  // }
-
-  // sendcom.RealOpticalTilt = OpticalTilt.Ab_Angle;
-  // sendcom.RealOpticalPan = OpticalPan.Ab_Angle;
-  // sendcom.RealBodyTilt = BodyTilt.Ab_Angle;
-  // sendcom.RealBodyPan = BodyPan.Ab_Angle;
-  // // sendcom.IMUTilt = ;
-  // // sendcom.IMUPan = ;
-  // // sendcom.Lidardistance = ;
-  // // sendcom.GunVoltage = ;
-  // // sendcom.SentryPermission = ;
-  // // sendcom.fire = ;
-  // // sendcom.RGBmagnification = ;
-  // // sendcom.remaining_bullets = ;
-
-
-  // memcpy(Sendbuf, &sendcom, sizeof(Sendcom));
-
-  // Serial.write(Sendbuf, sizeof(Sendbuf));
-  // delay(100);
-
-
-
-  if(Serial.available())
-  {
-    data = Serial.readStringUntil('\n');
-    cmd = data[0];
-    Angle1 = data.toFloat();
+  Serial.readBytes(Recvbuf, sizeof(Recvbuf));
+  if (Recvbuf[23] == 65) {
+    memcpy(&recvcom, Recvbuf, sizeof(Recvbuf));
   }
-  Serial.println(OpticalTilt.Ab_Angle);
-  Serial.print(' ');
-  Serial.println(OpticalPan.Ab_Angle);
+
+  sendcom.RealOpticalTilt = OpticalTilt.Ab_Angle;
+  sendcom.RealOpticalPan = OpticalPan.Ab_Angle;
+  sendcom.RealBodyTilt = BodyTilt.Ab_Angle;
+  sendcom.RealBodyPan = BodyPan.Ab_Angle;
+  // sendcom.IMUTilt = ;
+  // sendcom.IMUPan = ;
+  // sendcom.Lidardistance = ;
+  // sendcom.GunVoltage = ;
+  // sendcom.SentryPermission = ;
+  // sendcom.fire = ;
+  // sendcom.RGBmagnification = ;
+  // sendcom.remaining_bullets = ;
+
+
+  memcpy(Sendbuf, &sendcom, sizeof(Sendcom));
+
+  Serial.write(Sendbuf, sizeof(Sendbuf));
+  delay(100);
+
+
+
+  // if(Serial.available())
+  // {
+  //   data = Serial.readStringUntil('\n');
+  //   cmd = data[0];
+  //   Angle1 = data.toFloat();
+  // }
+  // Serial.println(OpticalTilt.Ab_Angle);
+  // Serial.print(' ');
+  // Serial.println(OpticalPan.Ab_Angle);
 }
 
 void TC3_Handler(void)
 {
-  // OpticalTilt.PID(recvcom.GoalOpticalTilt);
-  // OpticalPan.PID(recvcom.GoalOpticalPan);
-  // BodyTilt.PID(recvcom.GoalBodyTilt);
-  // BodyPan.PID(recvcom.GoalBodyPan);
+  OpticalTilt.PID(recvcom.GoalOpticalTilt);
+  OpticalPan.PID(recvcom.GoalOpticalPan);
+  BodyTilt.PID(recvcom.GoalBodyTilt);
+  BodyPan.PID(recvcom.GoalBodyPan);
 
 
-  OpticalTilt.PID(Angle1);
-  OpticalPan.PID(Angle1);
+  // OpticalTilt.PID(Angle1);
+  // OpticalPan.PID(Angle1);
+
   TC_GetStatus(TC1, 0);
   TimerControl();
 }
